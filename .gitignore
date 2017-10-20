@@ -99,3 +99,10 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# Visual Studio
+.vs
+
+*.pkl
+
+.idea/
