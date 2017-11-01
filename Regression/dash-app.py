@@ -35,8 +35,8 @@ app.layout = html.Div(children=[
                 )
             ],
             'layout': go.Layout(
-                xaxis={'type': 'log', 'title': 'Salary'},
-                yaxis={'title': 'Years of Experience'},
+                xaxis={'type': 'log', 'title': 'Years of Experience'},
+                yaxis={'title': 'Salary'},
                 margin={'l': 40, 'b': 40, 't': 10, 'r': 10},
                 hovermode='closest'
             )
