@@ -106,3 +106,5 @@ ENV/
 *.pkl
 
 .idea/
+
+/Cognitive Services/Text Analytics/config.json
