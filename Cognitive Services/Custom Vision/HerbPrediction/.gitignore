@@ -339,5 +339,6 @@ ASALocalRun/
 *.pubxml.user
 
 HerbPrediction/App.json
+HerbPrediction/basil_test.jpg
 
 # End of https://www.gitignore.io/api/visualstudio
