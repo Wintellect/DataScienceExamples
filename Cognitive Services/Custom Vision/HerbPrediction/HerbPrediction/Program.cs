@@ -32,11 +32,19 @@ namespace HerbPrediction
             Console.WriteLine("Predicting basil image");
             var imageFile = File.OpenRead("basil_test.jpg");
 
-            var result = predictionEndpoint.PredictImage(herbProject.Id, imageFile);
-            
-            foreach(var prediction in result.Predictions)
+            if (herbProject != null)
             {
-                Console.WriteLine($"Tag: {prediction.Tag} Probability: {prediction.Probability}");
+
+                var result = predictionEndpoint.PredictImage(herbProject.Id, imageFile);
+
+                foreach (var prediction in result.Predictions)
+                {
+                    Console.WriteLine($"Tag: {prediction.Tag} Probability: {prediction.Probability}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Project doesn't exist.");
             }
 
             Console.ReadLine();
