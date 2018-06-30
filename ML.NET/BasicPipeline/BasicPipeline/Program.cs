@@ -4,6 +4,7 @@ using Microsoft.ML.Models;
 using Microsoft.ML.Trainers;
 using Microsoft.ML.Transforms;
 using System;
+using System.Linq;
 
 namespace BasicPipeline2
 {
@@ -23,7 +24,10 @@ namespace BasicPipeline2
             Console.WriteLine("--------------Training----------------");
             var model = pipeline.Train<SalaryData, SalaryPrediction>();
 
-            // Evaluate
+            var appPath = System.IO.Path.GetDirectoryName(Environment.GetCommandLineArgs().First());
+            var path = System.IO.Path.Combine(appPath, "model.zip"); ;
+            model.WriteAsync(path);
+
             Console.WriteLine(Environment.NewLine);
             Console.WriteLine("--------------Evaluating----------------");
             var testData = new TextLoader("SalaryData-test.csv").CreateFrom<SalaryData>(useHeader: true, separator: ',');
@@ -34,7 +38,6 @@ namespace BasicPipeline2
             Console.WriteLine($"Root Mean Squared: {metrics.Rms}");
             Console.WriteLine($"R^2: {metrics.RSquared}");
 
-            // Predict
             Console.WriteLine(Environment.NewLine);
             Console.WriteLine("--------------Predicting----------------");
             var prediction = model.Predict(new SalaryData { YearsExperience = PREDICTION_YEARS });
