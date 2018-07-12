@@ -3,10 +3,10 @@ using Microsoft.ML.Data;
 using Microsoft.ML.Models;
 using Microsoft.ML.Trainers;
 using Microsoft.ML.Transforms;
+using MLNetShared;
 using System;
-using System.Linq;
 
-namespace BasicPipeline2
+namespace BasicPipeline
 {
     class Program
     {
@@ -14,9 +14,12 @@ namespace BasicPipeline2
 
         static void Main(string[] args)
         {
+            var dataset = MLNetUtilities.GetDataPathByDatasetName("SalaryData.csv");
+            var testDataset = MLNetUtilities.GetDataPathByDatasetName("SalaryData-test.csv");
+
             var pipeline = new LearningPipeline
             {
-                new TextLoader("SalaryData.csv").CreateFrom<SalaryData>(useHeader: true, separator: ','),
+                new TextLoader(dataset).CreateFrom<SalaryData>(useHeader: true, separator: ','),
                 new ColumnConcatenator("Features", "YearsExperience"),
                 new GeneralizedAdditiveModelRegressor()
             };
@@ -24,13 +27,11 @@ namespace BasicPipeline2
             Console.WriteLine("--------------Training----------------");
             var model = pipeline.Train<SalaryData, SalaryPrediction>();
 
-            var appPath = System.IO.Path.GetDirectoryName(Environment.GetCommandLineArgs().First());
-            var path = System.IO.Path.Combine(appPath, "model.zip"); ;
-            model.WriteAsync(path);
+            model.WriteAsync(MLNetUtilities.GetModelFilePath("model.zip"));
 
             Console.WriteLine(Environment.NewLine);
             Console.WriteLine("--------------Evaluating----------------");
-            var testData = new TextLoader("SalaryData-test.csv").CreateFrom<SalaryData>(useHeader: true, separator: ',');
+            var testData = new TextLoader(testDataset).CreateFrom<SalaryData>(useHeader: true, separator: ',');
 
             var evaluator = new RegressionEvaluator();
             var metrics = evaluator.Evaluate(model, testData);
