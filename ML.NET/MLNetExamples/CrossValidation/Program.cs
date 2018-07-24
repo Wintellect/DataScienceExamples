@@ -23,14 +23,21 @@ namespace CrossValidation
                 new GeneralizedAdditiveModelRegressor()
             };
 
-            var crossValidator = new CrossValidator() { Kind = MacroUtilsTrainerKinds.SignatureRegressorTrainer, NumFolds = 10 };
+            var crossValidator = new CrossValidator()
+            {
+                Kind = MacroUtilsTrainerKinds.SignatureRegressorTrainer,
+                NumFolds = 5
+            };
             var crossValidatorOutput = crossValidator.CrossValidate<SalaryData, SalaryPrediction>(pipeline);
 
-            var r2 = crossValidatorOutput.RegressionMetrics.Sum(metric => metric.RSquared);
+            Console.Write(Environment.NewLine);
+            Console.WriteLine("Root Mean Squared for each fold:");
+            crossValidatorOutput.RegressionMetrics.ForEach(m => Console.WriteLine(m.Rms));
 
             var totalR2 = crossValidatorOutput.RegressionMetrics.Sum(metric => metric.RSquared);
             var totalRMS = crossValidatorOutput.RegressionMetrics.Sum(metric => metric.Rms);
 
+            Console.Write(Environment.NewLine);
             Console.WriteLine($"Average R^2: {totalR2 / crossValidatorOutput.RegressionMetrics.Count}");
             Console.WriteLine($"Average RMS: {totalRMS / crossValidatorOutput.RegressionMetrics.Count}");
 
