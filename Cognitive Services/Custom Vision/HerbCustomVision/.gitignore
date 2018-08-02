@@ -338,7 +338,7 @@ ASALocalRun/
 # should be stored in the .pubxml.user file.
 *.pubxml.user
 
-HerbPrediction/App.json
-HerbPrediction/basil_test.jpg
+HerbCustomVision/App.json
+HerbCustomVision/basil_test.jpg
 
 # End of https://www.gitignore.io/api/visualstudio
