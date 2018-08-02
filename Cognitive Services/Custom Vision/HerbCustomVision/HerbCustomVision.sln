@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2035
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HerbPrediction", "HerbPrediction\HerbPrediction.csproj", "{2D73CD7A-D309-4214-BB37-B996B2777BFE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HerbCustomVision", "HerbCustomVision\HerbCustomVision.csproj", "{2D73CD7A-D309-4214-BB37-B996B2777BFE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
