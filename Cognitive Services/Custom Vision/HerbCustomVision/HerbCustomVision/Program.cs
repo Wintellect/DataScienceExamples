@@ -1,4 +1,5 @@
 ﻿using Microsoft.Cognitive.CustomVision.Prediction;
+using Microsoft.Cognitive.CustomVision.Prediction.Models;
 using Microsoft.Cognitive.CustomVision.Training;
 using Microsoft.Cognitive.CustomVision.Training.Models;
 using Newtonsoft.Json;
@@ -19,39 +20,54 @@ namespace HerbPrediction
             var predictionEndpoint = new PredictionEndpoint { ApiKey = keys.PredictionKey };
 
             var projects = trainingApi.GetProjects();
-            var herbProject = projects.Where(p => p.Name == "Herbs").FirstOrDefault();
+            var herbProject = projects.FirstOrDefault(p => p.Name == "Herbs");
 
             Console.WriteLine("Press 1 to predict and 2 to train:");
             var pathChoice = Console.ReadLine();
 
             if ("1".Equals(pathChoice))
             {
-                Console.WriteLine("Input path to image to test:");
-                var imagePath = Console.ReadLine();
+                Console.WriteLine("Press 1 to predict on a URL or 2 to predict on a local file:");
+                var predictType = Console.ReadLine();
 
-                if (!File.Exists(imagePath))
+                if ("1".Equals(predictType))
                 {
-                    Console.WriteLine("File does not exist. Press enter to exit.");
-                    Console.ReadLine();
-                    return;
-                }
+                    Console.WriteLine("Input the URL to an image to test:");
+                    var imageUrl = Console.ReadLine();
 
-                Console.WriteLine("Image predictions:");
-
-                var imageFile = File.OpenRead(imagePath);
-
-                if (herbProject != null)
-                {
-                    var result = predictionEndpoint.PredictImage(herbProject.Id, imageFile);
-
-                    foreach (var prediction in result.Predictions)
+                    if (herbProject != null)
                     {
-                        Console.WriteLine($"Tag: {prediction.Tag} Probability: {String.Format("Value: {0:P2}.", prediction.Probability)}");
+                        var result = predictionEndpoint.PredictImageUrl(herbProject.Id, new Microsoft.Cognitive.CustomVision.Prediction.Models.ImageUrl(imageUrl));
+
+                        PrintResults(result);
                     }
                 }
                 else
                 {
-                    Console.WriteLine("Project doesn't exist.");
+                    Console.WriteLine("Input path to image to test:");
+                    var imagePath = Console.ReadLine();
+
+                    if (!File.Exists(imagePath))
+                    {
+                        Console.WriteLine("File does not exist. Press enter to exit.");
+                        Console.ReadLine();
+                        return;
+                    }
+
+                    Console.WriteLine("Image predictions:");
+
+                    var imageFile = File.OpenRead(imagePath);
+
+                    if (herbProject != null)
+                    {
+                        var result = predictionEndpoint.PredictImage(herbProject.Id, imageFile);
+
+                        PrintResults(result);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Project doesn't exist.");
+                    }
                 }
 
                 Console.ReadLine();
@@ -113,6 +129,15 @@ namespace HerbPrediction
                 Console.WriteLine("Done training!");
 
                 Console.ReadLine();
+            }
+        }
+
+        private static void PrintResults(ImagePredictionResultModel result)
+        {
+            Console.Write(Environment.NewLine);
+            foreach (var prediction in result.Predictions)
+            {
+                Console.WriteLine($"Tag: {prediction.Tag} - Probability: {String.Format("Value: {0:P2}.", prediction.Probability)}");
             }
         }
 
